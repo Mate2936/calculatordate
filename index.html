@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculator de date</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Calculator de date</h1>
+    <form>
+      <label for="name">Introduceți un nume:</label>
+      <input type="text" id="name" name="name">
+      <br><br>
+      <label for="date">Introduceți o dată:</label>
+      <input type="date" id="date" name="date">
+      <br><br>
+      <input type="button" value="Calculează" onclick="calculeaza()">
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+      function calculeaza() {
+        // Obțineți numele și data din formular
+        var numeIntrodus = document.getElementById("name").value;
+        var dataIntrodusa = new Date(document.getElementById("date").value);
+
+        // Calculați data la 280 de zile în viitor
+        var dataViitoare = new Date(dataIntrodusa);
+        dataViitoare.setDate(dataViitoare.getDate() + 280);
+
+        // Calculați intervalul de date
+        var dataMinima = new Date(dataViitoare);
+        dataMinima.setDate(dataMinima.getDate() - 7);
+
+        var dataMaxima = new Date(dataViitoare);
+        dataMaxima.setDate(dataMaxima.getDate() + 17);
+
+        // Afișați rezultatele
+        var rezultat = document.getElementById("result");
+        rezultat.innerHTML = "<p>Data la 282 de zile după " + dataIntrodusa.toDateString() + " este " + dataViitoare.toDateString() + ".</p>";
+        rezultat.innerHTML += "<p>Intervalul estimat de date este de la " + dataMinima.toDateString() + " la " + dataMaxima.toDateString() + ".</p>";
+
+        // Creează obiectul cu datele pentru webhook
+        var data = {
+          content: "Rezultatele pentru " + numeIntrodus + ": \nData la 282 de zile după " + dataIntrodusa.toDateString() + " este " + dataViitoare.toDateString() + ".\nIntervalul estimat de date este de la " + dataMinima.toDateString() + " la " + dataMaxima.toDateString() + "."
+        };
+
+        // Trimite datele la webhook
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://discord.com/api/webhooks/1094291933158977606/AX3_DUKTspRhKbNDMoJz0ah9uJSHoV_AQaNvWfsJlFAYR2eB9jvWAHc29S3Zq64JB44O", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(data));
+      }
+    </script>
+  </body>
+</html>
